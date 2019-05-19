@@ -9,10 +9,10 @@
         <div class="content">
 
             <div class="col-lg-12">
-                <h3><i class="fa fa-key" style="font-size:32px;"></i> Role Management
+                <h4><i class="fa fa-key" style="font-size:28px;"></i> Role Management
 
                     <a href="{{ route('users.index') }}" class="btn btn-default pull-right">Users</a>
-                    <a href="{{ route('permissions.index') }}" class="btn btn-default pull-right">Permissions</a></h3>
+                    <a href="{{ route('permissions.index') }}" class="btn btn-default pull-right">Permissions</a></h4>
                 <hr>
                 <div class="table-responsive" style="font-size: 13px;color: #65767c">
                     <table class="table table-striped">

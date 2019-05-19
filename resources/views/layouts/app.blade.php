@@ -21,6 +21,9 @@
     <!-- common application js -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/smooth-scrollbar.js') }}"></script>
+    
+    <script src="{{ asset('js/bootstrap-notify.js') }}"></script>
+
     {{--<script src="{{ asset('js/settings.js') }}"></script>--}}
 
     <!-- Fonts -->
@@ -31,6 +34,11 @@
     <link href="{{ asset('css/mate.hover.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/application.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('css/fresh-bootstrap-table.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('css/remodal.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/remodal-default-theme.css') }}" rel="stylesheet">    
     
 {{--    <link href="{{ asset('css/app.css') }}" rel="stylesheet">--}}
 </head>
@@ -50,6 +58,7 @@
 
                         <h4 class="title"><small>Welcome</small><br>
                         </h4>
+
                     <h4 class="title">{{ \Auth::user()->username}}</h4>
 
                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

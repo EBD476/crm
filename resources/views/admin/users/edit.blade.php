@@ -10,10 +10,9 @@
             @csrf
             @method('PUT')
             <div class="col-md-12">
-
                 {{--  <h3><i class='fa fa-user-plus'></i> Edit {{$user->name}}</h3>
                 <hr> --}}
-                <section class="panel">
+                <section class="panel panel-navy">
                     <header class="panel-heading tab-bg-dark-navy-blue">
                         <ul class="nav nav-tabs">
                             <li class="active">
@@ -190,7 +189,7 @@
                                         <label class="control-label"> Internet </label>
                                     </li>
                                     <li>
-                                        <input type="checkbox" name="options[]" value="12 @if ($options[11]) checked
+                                        <input type="checkbox" name="options[]" value="12" @if ($options[11]) checked
                                             @endif>
                                         <label class="control-label"> SMS </label>
                                     </li>
@@ -214,5 +213,6 @@
 
     </div>
 </div>
+
 
 @endsection

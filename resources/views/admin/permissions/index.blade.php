@@ -7,10 +7,10 @@
     <div class="wrap main-content" data-scrollbar>
         <div class="content">
             <div class="col-lg-12">
-                <h3><i class="fa fa-key"  style="font-size:32px;">&nbsp;</i>Available Permissions
+                <h4><i class="fa fa-key"  style="font-size:28px;">&nbsp;</i>Available Permissions
 
                     <a href="{{ route('users.index') }}" class="btn btn-default pull-right">Users</a>
-                    <a href="{{ route('roles.index') }}" class="btn btn-default pull-right">Roles</a></h3>
+                    <a href="{{ route('roles.index') }}" class="btn btn-default pull-right">Roles</a></h4>
                 <hr>
                 <div class="table-responsive" style="font-size: 13px;color: #65767c">
                     <table class="table table-striped">

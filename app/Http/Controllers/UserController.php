@@ -113,7 +113,7 @@ class UserController extends Controller
     {
 
         if (isset($request->options)){
-
+      
             $result = "0000000000000";         
             for ($i=0; $i < count($request->options) ; $i++) { 
                 $result[$request->options[$i]] = "1";
@@ -143,11 +143,18 @@ class UserController extends Controller
                 $device_code =md5(User::findOrFail($id)->device_id);
                 $publish_topic = 'HANTASMARTHOME/v1/' . $device_code . '/cmd';
                 $data = ["msg"=>"options","value" =>(string)bindec($result) ];  
-                $mqtt->publish($publish_topic, json_encode($data), 0); //. date("r")     
+                $mqtt->publish($publish_topic, json_encode($data), 1); //. date("r")
+                // $data = ["msg"=>"message","title" =>"Notice","message" =>"Smart home options actived !" ];      
+                $data = ["msg"=>"message","title" =>"کاربر گرامی","message" =>"قابلیت های سیستم هوشمند برای شما فعال شد." ];      
+                $mqtt->publish($publish_topic,json_encode($data), 1);
                 $mqtt->close();
             } else {
                 echo "Time out!\n";
             }
+
+            // return redirect()->route('users.index')
+            // ->with('flash_message',
+            //     'User successfully edited.');
         }
 
 
@@ -157,10 +164,9 @@ class UserController extends Controller
             //Validate name, email and password fields
             $this->validate($request, [
                 'name' => 'required|max:120',
-                'password' => 'required|min:6|confirmed'
             ]);
 
-            $input = $request->only(['name', 'password', 'username', 'device_id']);
+            $input = $request->only(['name','username', 'device_id']);
             $roles = $request['roles']; //Retreive all roles
             $user->fill($input)->save();
 
@@ -169,17 +175,22 @@ class UserController extends Controller
             } else {
                 $user->roles()->detach(); //If no role is selected remove exisiting role associated to a user
             }
-
+    
             return redirect()->route('users.index')
                 ->with('flash_message',
                     'User successfully edited.');
         } else {
+
+            $this->validate($request, [
+                'password' => 'required|min:6|confirmed'
+            ]);
+            
             $input = $request->only(['password']);
             $user = Auth()->user();
             $user->fill($input)->save();
         }   
-
-        return redirect()->route('home')
+  
+        return redirect()->route('users.index')
             ->with('flash_message',
                 'User successfully edited.');
 
