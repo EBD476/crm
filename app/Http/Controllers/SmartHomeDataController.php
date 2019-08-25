@@ -53,9 +53,9 @@ class SmartHomeDataController extends Controller
         $room_id = $request->roomId - 1;
         $room = AllModules::getModules();
 
-
-        if ($room!= null && $room_id >= 0) {
-
+        $homedata = HomeData::all()->where('device_code',Auth::user()->device_id)->first();
+        
+        if (($room!= null || $homedata!=null) && $room_id >= 0) {
             if ($room_id < 1000) {
                 $room[$room_id]->room_name = $request->roomName;
                 $room[$room_id]->room_type = $request->roomType;
@@ -66,7 +66,6 @@ class SmartHomeDataController extends Controller
                 AllModules::setModulesById($room_id,$room);
             }
 
-
             $room_data = AllModules::getModules();
 
             $homedata = HomeData::all()->where('device_code',Auth::user()->device_id)->first();
@@ -75,8 +74,7 @@ class SmartHomeDataController extends Controller
             $homedata->home_data = !empty( $room_data ) ? '{"rooms":' .$room_data."}" : NULL;
             $homedata->update();
 
-        } else{
-
+        } else{            
             $module = new Room();
             $module->setRoomName($request->roomName);
             $module->setRoomType($request->roomType);
@@ -202,6 +200,8 @@ class SmartHomeDataController extends Controller
         $homedata = HomeData::all()->where('device_code',Auth::user()->device_id)->first();
         $homedata->home_data = str_replace( $room_data ,'',$homedata->home_data);
         $homedata->home_data = str_replace( ',]',']',$homedata->home_data);
+        $homedata->home_data = str_replace( '},,','},',$homedata->home_data);
+        $homedata->home_data = str_replace( '[,{','[{',$homedata->home_data);     
         $homedata->update();
         return back();
     }

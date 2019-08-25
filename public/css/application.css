@@ -25549,6 +25549,7 @@ table.table thead .sorting_desc_disabled {
   background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
   background-blend-mode: color-dodge;
   background-size: cover;
+  background:   linear-gradient(to right, rgb(106, 48, 147), rgb(160, 68, 255));
 }
 
 

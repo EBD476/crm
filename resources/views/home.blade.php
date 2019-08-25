@@ -52,13 +52,13 @@
                 </table>
             </div>
             @endhasanyrole
-
+            
             @if (!isset($homeData))
             <div class="row text-center" >
                 <div class="col-md-12 ">
                     <section class="widget">
                         <header>
-                            <h4>
+                            <h4>                                    
                                {{__('Welcome to Smart Home configuration Panel')}}  <span class="fw-semi-bold"> </span>
                             </h4>
                             Please select add new device

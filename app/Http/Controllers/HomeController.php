@@ -38,8 +38,13 @@ class HomeController extends Controller
         $places = Places::$rooms;
 
         if ($home_data != null){
-            $home_data = json_decode($home_data->home_data)->rooms;
-            AllModules::setJsonModule($home_data);
+            if ($home_data->home_data != ""){
+                $home_data = json_decode($home_data->home_data)->rooms;
+                AllModules::setJsonModule($home_data);
+            } else {
+                $home_data =  json_decode('{"rooms" : []}')->rooms;
+                AllModules::setJsonModule($home_data);
+            }
         } else {
             $home_data =  json_decode('{"rooms" : []}')->rooms;
         }
