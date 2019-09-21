@@ -25544,12 +25544,12 @@ table.table thead .sorting_desc_disabled {
 }
 
 .login-container {
-  /*background: url("../images/login_bg.jpg");*/
-  background: rgb(238,174,202);
-  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+  background: url("../images/bg8.jpg");
+  /* background: rgb(238,174,202); */
+  /* background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%); */
   background-blend-mode: color-dodge;
   background-size: cover;
-  background:   linear-gradient(to right, rgb(106, 48, 147), rgb(160, 68, 255));
+  /* background:   linear-gradient(to right, rgb(106, 48, 147), rgb(160, 68, 255)); */
 }
 
 
@@ -25559,7 +25559,7 @@ table.table thead .sorting_desc_disabled {
 
 .login-widget {
   /*background: rgba(56, 177, 196, 0.6);*/
-  background: rgba(9, 9, 12, 0.35);
+  background: rgba(9, 9, 12, 0.6);
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
 }
@@ -25572,7 +25572,7 @@ table.table thead .sorting_desc_disabled {
 .login-widget-more{
   width: 300px;
   /*background: rgba(56, 177, 196, 0.7);*/
-  background: rgba(9, 9, 12, 0.4);
+  background: rgba(9, 9, 12, 0.6);
   margin-left: 0;
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;
@@ -26556,6 +26556,16 @@ table.table thead .sorting_desc_disabled {
 
 .user-list-header{
   padding: 0 20px 0 20px;
+}
+
+.dz-details{
+  font-size: .5em;
+}
+.dz-size{
+  height: 20px;
+}
+.dz-success-mark,.dz-error-mark{
+  display: none;
 }
 /*input[type="password"]{*/
   /*font-size: 20px;*/

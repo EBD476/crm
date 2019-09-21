@@ -21,6 +21,7 @@ Auth::routes();
 Route::group( ['middleware' => 'auth'], function() {
     Route::get('/home', 'HomeController@index')->name('home');
     Route::resource('/homedata', 'SmartHomeDataController');//->name('homedata');
+    Route::post('/roomimage','SmartHomeDataController@upload')->name('storeimage');
 //    Route::post('/homedata/{id}', 'SmartHomeDataController@destroy');
     Route::post('/storelight', 'SmartHomeDataController@storelight')->name('storelight');
     Route::post('/storemodule', 'SmartHomeDataController@storemodule')->name('storemodule');

@@ -49,19 +49,20 @@ class SmartHomeDataController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {                
         $room_id = $request->roomId - 1;
         $room = AllModules::getModules();
 
         $homedata = HomeData::all()->where('device_code',Auth::user()->device_id)->first();
-        
-        if (($room!= null || $homedata!=null) && $room_id >= 0) {
-            if ($room_id < 1000) {
+            
+        if (($room!= null || $homedata!=null) && $room_id >= -1) {
+            if (isset($room[$room_id])) {              
                 $room[$room_id]->room_name = $request->roomName;
                 $room[$room_id]->room_type = $request->roomType;
+                $room[$room_id]->room_image = $request->roomImage;
                 AllModules::setModulesById($room_id,$room[$room_id]);
             } else {
-                $room = ['room_name'=>$request->roomName, 'room_type'=>$request->roomType];
+                $room = ['room_name'=>$request->roomName, 'room_type'=>$request->roomType ,'room_image'=>$request->roomImage];
                 $room_id = sizeof(AllModules::getModules());
                 AllModules::setModulesById($room_id,$room);
             }
@@ -78,6 +79,7 @@ class SmartHomeDataController extends Controller
             $module = new Room();
             $module->setRoomName($request->roomName);
             $module->setRoomType($request->roomType);
+            $module->setRoomImage($request->roomImage);
             AllModules::setModules($module);
 
             $homedata = new HomeData();
@@ -216,4 +218,55 @@ class SmartHomeDataController extends Controller
     {
 
     }
+
+    public function upload(Request $request)
+    {
+        $image = $request->file('file');
+        $filename=$_FILES['file']['name'];        
+
+        if (isset($image)) {
+            // $current_date = Carbon::now()->todatestring();
+            if (!file_exists(public_path().'/room_images/'.Auth::user()->device_id)) {
+                mkdir(public_path().'/room_images/'.Auth::user()->device_id, 0777, true);
+            }
+            $image->move(public_path().'/room_images/'.Auth::user()->device_id, $filename);
+        } else {
+            $image_name = 'default.png';
+        }
+
+        return response()->json([
+            'image_name' => $filename
+        ]);
+    }
+
+    public function downloadImage($id,$image)
+    {
+        $home_data = HomeData::select('home_data')->where('device_code',$id)->first();
+        if (isset($home_data)) {
+            
+            $file = public_path() . '/room_images/'. $id .'/'. $image;
+            $ext = pathinfo($file, PATHINFO_EXTENSION);
+        
+            if($ext == 'png' || 'PNG'){
+              $headers = array(
+                  'Content-Type' => 'image/png',
+                );
+            }
+        
+            else if($ext == 'jpg' || 'jpeg' || 'JPEG' || 'JPG'){
+              $headers = array(
+                  'Content-Type' => 'image/jpeg',
+                );
+              }              
+        
+            return response()->download($file, $image, $headers);
+
+            // return response($home_data->home_data);
+        }
+        else{
+            return 'not authorized';
+          //  return abort(403);
+        }
+    }
+
 }

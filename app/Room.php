@@ -14,6 +14,7 @@ class Room
     private $room_name;
     private $room_type;
     private $light_module;
+    private $room_image;
 
     public function getRoomName(){
         return $this->room_name;
@@ -33,6 +34,14 @@ class Room
 
     public function setLights($value){
         $this->light_module = $value;
+    }
+
+    public function setRoomImage($value){
+        $this->room_image = $value;
+    }
+
+    public function getRoomImage(){
+        return $this->room_image;
     }
 
     public function toJson(){

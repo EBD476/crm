@@ -30,3 +30,4 @@ Route::post('auth', function (Request $request) {
 
 
 Route::get('devconfig/{id}', 'SmartHomeDataController@index');
+Route::get('devconfig/{id}/{image}', 'SmartHomeDataController@downloadImage');

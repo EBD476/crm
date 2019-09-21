@@ -314,18 +314,23 @@
             </div>
             @else
                 @role('role_user')
-                @foreach($homeData as $data)
+                @foreach($homeData as $index => $data)
                     <div class="col-md-3 col-sm-6 col-xs-6">
                         <div class="box">
                             <div class="icon">
                                 <a href="#" data-toggle="modal" data-target="#roomModal"
                                    data-value="{{json_encode($data)}}"
-                                   data-id="{{$loop->iteration}}"
+                                   data-id="{{  $loop->iteration }}" 
+                                   {{-- sprintf("1%'03d", $loop->iteration)  --}}
                                    data-backdrop="static">
                                     <div data-zlname="room" style="border-radius: 5px"><div data-zl-ovrolling="zl_overlay_test2" style="background: rgb(255, 255, 255); left: 0px; top: -220px; opacity: 0.7; display: block;"></div>
+                                    @if (!file_exists('public/room_images/'.Auth::user()->device_id.'/R'. $loop->iteration .'.jpg'))
                                         <img src="{{ asset('images/rooms/R'.$data->room_type.'.jpg')}} ">
-                                        <a data-zl-popup="link" href="#" data-toggle="modal"  data-target="#roomModal" data-backdrop="static" data-value="{{json_encode($data)}}" data-id="{{$loop->iteration}}" style="left: 88.5px; top: -120px; display: block;"><i class="fa fa-edit" style="color: #5b666d;"> </i></a>
-                                        <a data-zl-popup="link2" href="#" data-toggle="modal"  data-target="#confirmModal" data-backdrop="static" data-value="{{json_encode($data)}}" data-id="{{$loop->iteration}}" style="left: 88.5px; top: -120px; display: block;"><i class="fa fa-remove" style="color: #5b666d;"> </i></a>
+                                        @else 
+                                        <img src="{{ asset('public/room_images/'.Auth::user()->device_id.'/R'.$loop->iteration.'.jpg')}}" width="210" height="102">
+                                    @endif
+                                        <a data-zl-popup="link" href="#" data-toggle="modal"  data-target="#roomModal" data-backdrop="static" data-value="{{json_encode($data)}}" data-id="{{  $loop->iteration }}" style="left: 88.5px; top: -120px; display: block;"><i class="fa fa-edit" style="color: #5b666d;"> </i></a>
+                                        <a data-zl-popup="link2" href="#" data-toggle="modal"  data-target="#confirmModal" data-backdrop="static" data-value="{{json_encode($data)}}" data-id="{{ $loop->iteration }}" style="left: 88.5px; top: -120px; display: block;"><i class="fa fa-remove" style="color: #5b666d;"> </i></a>
                                         {{--<a data-zl-popup="link2" href="{{ route('homedata.update', ['homedatum' =>  $loop->iteration]) }}"--}}
                                            {{--style="right: 88.5px; top: -120px; display: block;"--}}
                                            {{--onclick="event.preventDefault();--}}
@@ -350,13 +355,10 @@
                                 </a>
                                 {{--<i class="fa fa-building-o"></i>--}}
                             </div>
-{{--                            {{dd(json_decode( json_decode($data->home_data)[0])->room_name)}}}--}}
                             <div class="description">
-{{--                                {{dd(sizeof(json_decode(json_decode($data)->light_module)))}}--}}
                                <h4>{{$data->room_name}} </h4>
                                 <span>Sensor states</span>
                                 {{--<span class="key">{{__('Lights')}}</span>--}}
-
                                         <ul class="overall-stats">
                                             <li>
                                                 <a href="#" data-toggle="modal" data-target="#lightModal" data-id="{{$loop->iteration}}" data-value="{{isset($data->light_module) ? json_encode($data->light_module) : 0}}">
@@ -424,9 +426,14 @@
 
                             </div>
                         </div>
+                        @php
+                          $index++;
+                        @endphp
                     </div>
+                    
                 @endforeach
-                    <a href="#" data-toggle="modal" data-target="#roomModal" data-backdrop="static" data-id="1001">
+                    <a href="#" data-toggle="modal" data-target="#roomModal" data-backdrop="static" data-id="@if (isset($index)){{$index + 1 }}@endif">  
+                        {{-- sprintf("1%'03d", $index + 1)  --}}
                       <div class="btn-icon-list col-md-3">
                        <div class="btn-icon-detail"><i class="glyphicon glyphicon-plus-sign"></i>
                     <span>Create New </span>
@@ -617,15 +624,38 @@
                                 <div class="col-sm-7">
                                     <input name="roomName" type="text" id="normal-field" class="form-control" placeholder="{{__('Type room name')}}">
                                     <input type="hidden" id="roomId" name="roomId">
+                                    <input type="hidden" id="roomImage" name="roomImage">
                                 </div>
                             </div>
                         </fieldset>
+                    </form>
+
+                                 
+                <form action="{{url('/roomimage')}}" class="dropzone" id="dropzone"
+                enctype="multipart/form-data" data-id="2000">
+                        @csrf
+                        @method('POST')
+                        <div class="fallback">
+                            <div class="form-group">
+                                <label for="file">{{__('Room Image')}}</label>
+                                <input type="file" class="form-control"
+                                        name="file" >                                
+                            </div>
+                        </div>
+               </form>
+
+               <span> Note : Image format (jpg) </span>  <br>  
+               <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Image size   < 1MB </span>  
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{__('Close')}}</button>
-                    <input type="submit" id="btn-save-data" class="btn btn-primary" value="{{__('Save changes')}}"/>
+                    <input type="submit" id="btn-save-data" class="btn btn-primary" 
+                    onclick="$('#roomDataForm').submit()"
+                    value="{{__('Save changes')}}"/>
                 </div>
-                </form>
+
 
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -783,7 +813,10 @@
 
 @push('scripts')
     <script src="{{ asset('js/select2.min.js') }}"></script>
+    <script src="{{asset('js/dropzone.js')}}"></script>
+    <script src="{{asset('js/jquery.blockUI.js')}}"></script>
     <script>
+        var room_id ;
         $(window).load(function() {
 
             $('[data-zlname = room]').mateHover({
@@ -802,5 +835,34 @@
         $(".select2").each(function(){
             $(this).select2($(this).data());
         });
+
+ 
+        Dropzone.options.dropzone =
+        {
+                maxFilesize: 1,
+                maxFiles:1,
+                renameFile: function (file) {
+                    var dt = new Date();
+                    var time = dt.getTime();
+                // return time + '.jpg';
+                     return 'R' + room_id + '.jpg'
+                },
+                acceptedFiles: ".jpeg,.jpg",
+                addRemoveLinks: false,
+                timeout: 20000,
+                success: function (file, response) {    
+                    $('#roomImage').val(file.upload.filename);
+                },                
+                error: function (file, response) {
+                    return false;
+                }
+        };
+
+         
+        $('.modal').on('show.bs.modal', function(e) {
+            var roomId2 = $(e.relatedTarget).data('id');
+            room_id = roomId2;
+        });
+
     </script>
 @endpush

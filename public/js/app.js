@@ -504,6 +504,11 @@ function stream_index(d, i) {
 $('#roomDataForm').submit(function(e) {
     e.preventDefault();
     var $form = $(this);
+    $.blockUI({ 
+        message: '<span>Please wait ...<span>',
+        css: { border: 'none',padding: '15px',
+     '-webkit-border-radius': '10px', '-moz-border-radius': '10px',
+      backgroundColor: '#000', opacity: .5, "fontSize": "14px", color: '#b2b2b2' }} );
 
     $.ajax({
         method: 'POST',
@@ -511,8 +516,9 @@ $('#roomDataForm').submit(function(e) {
         data: $form.serialize(),
     })
         .done(function(data) {
-            $('#roomModal').modal('toggle');
-            location.reload();
+          $.unblockUI();
+           $('#roomModal').modal('toggle');
+          location.reload();
         })
         .error(function () {
             alert('Error!')
@@ -588,10 +594,11 @@ $('.modal').on('show.bs.modal', function(e) {
 
     createModuleForm();
     createLightForm();
+    var roomId = $(e.relatedTarget).data('id');
 
+    Dropzone.forElement("#dropzone").removeAllFiles(true);
     //get data-id attribute of the clicked element
-   var roomId = $(e.relatedTarget).data('id');
-   $(this).find('#roomId').val(roomId);
+   $(this).find('#roomId').val(roomId);   
 
     var roomData = $(e.relatedTarget).data('value');
     $(this).find('#roomData').val(JSON.stringify(roomData));

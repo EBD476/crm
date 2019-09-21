@@ -143,6 +143,8 @@ class UserController extends Controller
                 $device_code =md5(User::findOrFail($id)->device_id);
                 $publish_topic = 'HANTASMARTHOME/v1/' . $device_code . '/cmd';
                 $data = ["msg"=>"options","value" =>(string)bindec($result) ];  
+				$topics[$publish_topic] = array("qos" => 0, "function" => "procmsg");
+                $mqtt->subscribe($topics, 0);
                 $mqtt->publish($publish_topic, json_encode($data), 1); //. date("r")
                 // $data = ["msg"=>"message","title" =>"Notice","message" =>"Smart home options actived !" ];      
                 $data = ["msg"=>"message","title" =>"کاربر گرامی","message" =>"قابلیت های سیستم هوشمند برای شما فعال شد." ];      
