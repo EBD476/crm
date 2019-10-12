@@ -129,9 +129,9 @@
                             </div>
 
                             @role('role_su')    
-                            <div id="contact-2" class="tab-pane">
-                                <h3>Active Options</h3>
-                                <hr>
+                            <div id="contact-2" class="tab-pane">							
+							<h5>{{$user->name}} - {{$user->device_id}}</h5>							
+                                <h4>Active Options</h4>	
                                 <ul>
                                     <li>
                                         <input type="checkbox" name="options[]" value="1" @if ($options[0]) checked

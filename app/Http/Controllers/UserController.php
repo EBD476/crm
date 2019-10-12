@@ -111,8 +111,17 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-
-        if (isset($request->options)){
+		if ($request->password != null){
+				$this->validate($request, [
+					'password' => 'required|min:6|confirmed'
+				]);					
+			
+				$user = User::findOrFail($id);
+				$input = $request->only(['password']);
+				$user->fill($input)->save();
+		}
+			
+        else if (isset($request->options)){
       
             $result = "0000000000000";         
             for ($i=0; $i < count($request->options) ; $i++) { 
@@ -123,7 +132,7 @@ class UserController extends Controller
                                     ->first();
             
             $user_options->user_options = bindec($result);
-            $user_options->save();
+            $user_options->save();			
 
             //publish to mqtt
 
@@ -177,21 +186,28 @@ class UserController extends Controller
             } else {
                 $user->roles()->detach(); //If no role is selected remove exisiting role associated to a user
             }
-    
+			
             return redirect()->route('users.index')
                 ->with('flash_message',
                     'User successfully edited.');
-        } else {
-
-            $this->validate($request, [
-                'password' => 'required|min:6|confirmed'
-            ]);
-            
-            $input = $request->only(['password']);
-            $user = Auth()->user();
-            $user->fill($input)->save();
-        }   
+        } 
+//		else {
+//		
+//            $this->validate($request, [
+//                'password' => 'required|min:6|confirmed'
+//            ]);					
+//            
+//            $input = $request->only(['password']);
+//            $user = Auth()->user();
+//            $user->fill($input)->save();
+//        }   
   
+		if ($user->hasRole('role_user')){
+			 return redirect()->route('home')
+				->with('flash_message',
+					'User successfully edited.');
+		}
+	
         return redirect()->route('users.index')
             ->with('flash_message',
                 'User successfully edited.');

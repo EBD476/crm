@@ -204,6 +204,7 @@ class SmartHomeDataController extends Controller
         $homedata->home_data = str_replace( ',]',']',$homedata->home_data);
         $homedata->home_data = str_replace( '},,','},',$homedata->home_data);
         $homedata->home_data = str_replace( '[,{','[{',$homedata->home_data);     
+		$homedata->home_data = str_replace( '},]','}]',$homedata->home_data);  
         $homedata->update();
         return back();
     }
